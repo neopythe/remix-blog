@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: 'BL Melody Bold';
+  font-style: normal;
+  font-weight: 700;
+  src: local(''),
+    url('/fonts/bl-melody-bold/BLMelody-Bold.woff2') format('woff2'),
+    /* Chrome 26+, Opera 23+, Firefox 39+ */
+      url('/fonts/bl-melody-bold/BLMelody-Bold.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+html,
+body {
+  height: 100vh;
+  max-width: 100vw;
+  overflow: hidden;
+}
+
+.melody-bold {
+  font-family: 'BL Melody Bold';
+}
