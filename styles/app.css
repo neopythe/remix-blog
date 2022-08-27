@@ -22,3 +22,13 @@ body {
 .melody-bold {
   font-family: 'BL Melody Bold';
 }
+
+@media screen and (min-width: 48em) {
+  .navigation div {
+    display: none;
+  }
+
+  .navigation ul {
+    display: flex;
+  }
+}
