@@ -17,9 +17,17 @@ export default function Posts() {
   const { posts } = useLoaderData()
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
       <Heading>Posts</Heading>
       <ul className="flex flex-col gap-4">
+        {(!posts || posts.length === 0) && (
+          <span>
+            <Link to="/posts/new">
+              <span className="text-brand-blue-500">Add a new post</span>
+            </Link>{' '}
+            to get started.
+          </span>
+        )}
         {posts.map((post: any) => (
           <li key={post.id}>
             <div className="border p-4">

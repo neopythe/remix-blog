@@ -1,5 +1,5 @@
+import { Link, useLoaderData } from '@remix-run/react'
 import { useTheme } from '@chakra-ui/react'
-import { useLoaderData } from '@remix-run/react'
 import { prisma } from '~/db'
 
 import BoxGrid from '~/components/box-grid'
@@ -26,7 +26,15 @@ export default function Home() {
   return (
     <div className="flex flex-col items-end justify-between h-full">
       <section className="flex flex-col w-full gap-8">
-        {!posts && <p>Looks like there are no posts. yet. Why not add one?</p>}
+        {(!posts || posts.length === 0) && (
+          <span>
+            Looks like there are no posts yet. Why not{' '}
+            <Link to="/posts/new">
+              <span className="text-brand-blue-500">add one</span>
+            </Link>
+            ?
+          </span>
+        )}
         {posts.map((post: any, index: number) => (
           <PostPreview
             key={post.id}
