@@ -12,7 +12,7 @@ import Button from './button'
 export default function NewPostForm() {
   return (
     <>
-      <Form method="post" className="flex flex-col w-full md:w-2/3 gap-4">
+      <Form method="post" className="flex flex-col w-full gap-6">
         <Heading>New Post</Heading>
         <FormControl isRequired>
           <FormLabel>Title</FormLabel>
