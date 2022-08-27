@@ -1,8 +1,17 @@
-import type { MetaFunction, LinksFunction } from '@remix-run/node'
+import type {
+  MetaFunction,
+  LinksFunction,
+  LoaderFunction,
+} from '@remix-run/node'
 
 import { useContext, useEffect } from 'react'
 import { withEmotionCache } from '@emotion/react'
-import { ChakraProvider } from '@chakra-ui/react'
+import {
+  ChakraProvider,
+  cookieStorageManagerSSR,
+  extendTheme,
+  localStorageManager,
+} from '@chakra-ui/react'
 import {
   Links,
   LiveReload,
@@ -10,15 +19,40 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from '@remix-run/react'
 
 import { ServerStyleContext, ClientStyleContext } from './context'
 
+import Footer from './components/footer'
+import Navbar from './components/navbar'
+
 import styles from './styles/app.css'
+
+const colours = {
+  blue: {
+    900: '#0D47A1',
+    800: '#1565C0',
+    700: '#1976D2',
+    600: '#1E88E5',
+    500: '#2196F3',
+    400: '#42A5F5',
+    300: '#64B5F6',
+    200: '#90CAF9',
+    100: '#BBDEFB',
+    50: '#E3F2FD',
+  },
+}
+
+const theme = extendTheme({ colours })
+
+export const loader: LoaderFunction = async ({ request }) => {
+  return request.headers.get('cookie') ?? ''
+}
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
-  title: 'New Remix App',
+  title: 'Remix Blog',
   viewport: 'width=device-width,initial-scale=1',
 })
 
@@ -45,6 +79,7 @@ const Document = withEmotionCache(
       })
       // reset cache to reapply global styles
       clientStyleData?.reset()
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
@@ -71,11 +106,34 @@ const Document = withEmotionCache(
   }
 )
 
+const Layout = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className="flex flex-col justify-between h-full select-none">
+      <Navbar />
+      <main className="flex-1 max-w-screen-lg mx-auto">
+        <div className="p-8 max-h-full h-full">{children}</div>
+      </main>
+      <Footer />
+    </div>
+  )
+}
+
 export default function App() {
+  const cookies = useLoaderData()
+
   return (
     <Document>
-      <ChakraProvider>
-        <Outlet />
+      <ChakraProvider
+        theme={theme}
+        colorModeManager={
+          typeof cookies === 'string'
+            ? cookieStorageManagerSSR(cookies)
+            : localStorageManager
+        }
+      >
+        <Layout>
+          <Outlet />
+        </Layout>
       </ChakraProvider>
     </Document>
   )
