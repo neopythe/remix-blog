@@ -28,7 +28,7 @@ export default function Navbar() {
           <div>
             <DropdownMenu pages={pages} />
           </div>
-          <ul className="hidden gap-8">
+          <ul className="hidden gap-8 font-semibold">
             {pages.map((page) => (
               <li key={page}>
                 <NavLink key={page} to={`/${page.toLowerCase()}`}>
