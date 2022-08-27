@@ -1,32 +1,22 @@
-export default function Index() {
+import { useTheme } from '@chakra-ui/react'
+
+import BoxGrid from '~/components/box-grid'
+import PostPreview from '~/components/post-preview'
+
+export default function Home() {
+  const theme = useTheme()
+  const {
+    colours: { blue },
+  } = theme
+
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
-      <h1>Welcome to Remix</h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer"
-          >
-            15m Quickstart Blog Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/jokes"
-            rel="noreferrer"
-          >
-            Deep Dive Jokes App Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
+    <div className="flex flex-col items-end justify-between h-full">
+      <section className="flex flex-col gap-2">
+        <PostPreview />
+        <PostPreview right />
+        <PostPreview />
+      </section>
+      <BoxGrid colour={blue} />
     </div>
-  );
+  )
 }
