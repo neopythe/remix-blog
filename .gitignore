@@ -1,6 +1,7 @@
 node_modules
 
 /prisma/dev.db
+/app/styles/app.css
 /.cache
 /build
 /public/build
