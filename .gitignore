@@ -5,9 +5,8 @@ node_modules
 .vercel
 .output
 
+/api/
 /build/
 /public/build
-/api/index.js
-/api/index.js.map
 /app/styles/app.css
 /prisma/dev.db
