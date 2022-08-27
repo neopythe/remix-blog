@@ -111,7 +111,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     <div className="flex flex-col justify-between h-full select-none">
       <Navbar />
       <main className="flex-1 w-full max-w-screen-lg my-8 mx-auto overflow-y-auto">
-        <div className="p-8 w-full max-h-full h-full">{children}</div>
+        <div className="px-8 w-full max-h-full h-full">{children}</div>
       </main>
       <Footer />
     </div>
