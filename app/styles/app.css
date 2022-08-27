@@ -707,6 +707,14 @@ video {
   gap: 0.5rem;
 }
 
+.gap-12 {
+  gap: 3rem;
+}
+
+.gap-1 {
+  gap: 0.25rem;
+}
+
 .overflow-y-auto {
   overflow-y: auto;
 }
@@ -723,6 +731,10 @@ video {
   border-radius: 50%;
 }
 
+.border {
+  border-width: 1px;
+}
+
 .bg-brand-blue-600 {
   --tw-bg-opacity: 1;
   background-color: rgb(30 136 229 / var(--tw-bg-opacity));
@@ -735,6 +747,10 @@ video {
 
 .p-8 {
   padding: 2rem;
+}
+
+.p-4 {
+  padding: 1rem;
 }
 
 .px-6 {
@@ -802,6 +818,11 @@ video {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.text-brand-blue-500 {
+  --tw-text-opacity: 1;
+  color: rgb(33 150 243 / var(--tw-text-opacity));
 }
 
 .underline {
