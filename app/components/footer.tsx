@@ -8,10 +8,7 @@ export default function Footer() {
   } = theme
 
   return (
-    <footer
-      style={{ backgroundColor: blue[500], color: '#fff' }}
-      className="flex justify-center items-center h-24"
-    >
+    <footer className="flex justify-center items-center h-24 bg-brand-blue-500 text-white">
       <div className="flex items-center justify-center gap-8 w-full">
         <div className="flex flex-col items-center">
           <span className="melody-bold">
