@@ -18,7 +18,12 @@ export default function Posts() {
 
   return (
     <div className="flex flex-col gap-6">
-      <Heading>Posts</Heading>
+      <div className="flex justify-between items-center">
+        <Heading>Posts</Heading>
+        <Link to="/posts/new">
+          <Button>New post</Button>
+        </Link>
+      </div>
       <ul className="flex flex-col gap-4">
         {(!posts || posts.length === 0) && (
           <span>
@@ -28,9 +33,14 @@ export default function Posts() {
             to get started.
           </span>
         )}
-        {posts.map((post: any) => (
-          <li key={post.id}>
-            <div className="border p-4">
+        {posts.map(
+          (post: {
+            content: string
+            createdAt: Date
+            id: string
+            title: string
+          }) => (
+            <li key={post.id} className="border rounded border-gray-200 p-4">
               <Link to={`/posts/${post.id}`}>
                 <div className="flex flex-col">
                   <span className="font-semibold">{post.title}</span>
@@ -42,13 +52,10 @@ export default function Posts() {
                   </span>
                 </div>
               </Link>
-            </div>
-          </li>
-        ))}
+            </li>
+          )
+        )}
       </ul>
-      <Link to="/posts/new">
-        <Button>New post</Button>
-      </Link>
     </div>
   )
 }
