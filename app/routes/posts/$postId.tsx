@@ -5,7 +5,7 @@ import { prisma } from '~/db'
 
 import Button from '~/components/button'
 
-export const loader = async ({ params }: { params: any }) => {
+export const loader = async ({ params }: { params: { postId: string } }) => {
   const post = await prisma.post.findUnique({
     where: { id: params.postId },
   })
@@ -20,11 +20,11 @@ export const action = async ({
   params,
   request,
 }: {
-  params: any
+  params: { postId: string }
   request: Request
 }) => {
   const form = await request.formData()
-  if (String(form.get('_method')) === 'delete') {
+  if (form.get('_method') === 'delete') {
     const post = await prisma.post.findUnique({
       where: { id: params.postId },
     })
@@ -49,7 +49,7 @@ export default function Post() {
         {new Date(post.createdAt).toLocaleString()}
       </span>
       <p>{post.content}</p>
-      <form>
+      <form method="POST">
         <input type="hidden" name="_method" value="delete" />
         <Button>Delete</Button>
       </form>
