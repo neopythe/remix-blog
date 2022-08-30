@@ -35,16 +35,26 @@ export default function Home() {
             ?
           </span>
         )}
-        {posts.map((post: any, index: number) => (
-          <PostPreview
-            key={post.id}
-            id={post.id}
-            title={post.title}
-            content={post.content}
-            createdAt={post.createdAt}
-            right={index % 2 !== 0}
-          />
-        ))}
+        {posts.map(
+          (
+            post: {
+              content: string
+              createdAt: Date
+              id: string
+              title: string
+            },
+            index: number
+          ) => (
+            <PostPreview
+              key={post.id}
+              id={post.id}
+              title={post.title}
+              content={post.content}
+              createdAt={post.createdAt}
+              right={index % 2 !== 0}
+            />
+          )
+        )}
       </section>
       <BoxGrid colour={blue} />
     </div>
