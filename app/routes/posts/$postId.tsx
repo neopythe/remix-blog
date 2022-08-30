@@ -65,7 +65,6 @@ export default function Post() {
           {new Date(post.createdAt).toLocaleString()}
         </span>
       </div>
-      <br />
       <p
         style={{
           whiteSpace: 'pre-wrap',
