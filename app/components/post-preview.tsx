@@ -1,4 +1,5 @@
 import { Link } from '@remix-run/react'
+import { truncate } from 'lodash'
 
 export default function PostPreview({
   content,
@@ -25,7 +26,10 @@ export default function PostPreview({
         style={{ textAlign: right ? 'right' : 'left' }}
         className="text-sm max-w-full"
       >
-        {content}
+        {truncate(content, {
+          length: 160,
+          separator: /[,-]? +/,
+        })}
       </p>
       <div className="flex items-center gap-4">
         <div className="h-8 w-8 rounded-[50%] bg-slate-400"></div>
