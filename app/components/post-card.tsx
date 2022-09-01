@@ -6,7 +6,7 @@ interface Post {
   id: string;
   title: string;
   userId: string;
-  username: string;
+  user: { username: string };
 }
 
 export default function PostCard({ post }: { post: Post }) {
@@ -17,7 +17,7 @@ export default function PostCard({ post }: { post: Post }) {
         <span className="flex gap-1">
           <span>{new Date(post.createdAt).toLocaleString()}</span>
           <span>
-            by <span className="text-brand-blue-500">{post.username}</span>
+            by <span className="text-brand-blue-500">{post.user.username}</span>
           </span>
         </span>
       </div>
