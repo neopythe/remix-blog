@@ -1,12 +1,22 @@
-import { prisma } from '../app/db'
+import { prisma } from '../app/db';
 
 const seed = async () => {
+  const twixlover = await prisma.user.create({
+    data: {
+      username: 'twixlover',
+      // this is a hashed version of "twixrox"
+      passwordHash:
+        '$2b$10$K7L1OJ45/4Y2nIvhRVpCe.FSmhDdWoXehVzJptJ/op0lSsvqNu/1u',
+    },
+  });
+
   await Promise.all(
     getPosts().map((post) => {
-      return prisma.post.create({ data: post })
+      const data = { userId: twixlover.id, ...post };
+      return prisma.post.create({ data });
     })
-  )
-}
+  );
+};
 
 const getPosts = () => {
   return [
@@ -26,7 +36,7 @@ const getPosts = () => {
       title: 'What Is New In PHP 8?',
       content: `In this article we will look at some of the new features offered in version 8 of PHP`,
     },
-  ]
-}
+  ];
+};
 
-seed()
+seed();
