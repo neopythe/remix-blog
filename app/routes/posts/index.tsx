@@ -1,3 +1,5 @@
+import type { LoaderFunction } from '@remix-run/node';
+
 import { Link, useLoaderData } from '@remix-run/react';
 import { Heading } from '@chakra-ui/react';
 import { prisma } from '~/db';
@@ -5,7 +7,7 @@ import { prisma } from '~/db';
 import Button from '~/components/button';
 import PostCard from '~/components/post-card';
 
-export const loader = async () => {
+export const loader: LoaderFunction = async () => {
   const posts = await prisma.post.findMany({
     orderBy: { createdAt: 'desc' },
   });

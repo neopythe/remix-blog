@@ -1,3 +1,5 @@
+import type { LoaderFunction } from '@remix-run/node';
+
 import { Link, useLoaderData } from '@remix-run/react';
 import { useTheme } from '@chakra-ui/react';
 import { prisma } from '~/db';
@@ -5,7 +7,7 @@ import { prisma } from '~/db';
 import BoxGrid from '~/components/box-grid';
 import PostPreview from '~/components/post-preview';
 
-export const loader = async () => {
+export const loader: LoaderFunction = async () => {
   const posts = await prisma.post.findMany({
     take: 3,
     orderBy: { createdAt: 'desc' },

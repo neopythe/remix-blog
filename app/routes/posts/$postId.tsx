@@ -1,3 +1,5 @@
+import type { LoaderFunction } from '@remix-run/node';
+
 import { redirect } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 import { Heading } from '@chakra-ui/react';
@@ -5,7 +7,7 @@ import { prisma } from '~/db';
 
 import Button from '~/components/button';
 
-export const loader = async ({ params }: { params: { postId: string } }) => {
+export const loader: LoaderFunction = async ({ params }) => {
   const post = await prisma.post.findUnique({
     where: { id: params.postId },
   });
