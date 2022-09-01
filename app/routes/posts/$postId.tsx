@@ -10,11 +10,7 @@ import Button from '~/components/button';
 export const loader: LoaderFunction = async ({ params }) => {
   const post = await prisma.post.findUnique({
     where: { id: params.postId },
-  });
-  const user = await prisma.user.findUnique({
-    where: {
-      id: post?.userId,
-    },
+    include: { user: { select: { username: true } } },
   });
 
   if (!post)
@@ -22,8 +18,7 @@ export const loader: LoaderFunction = async ({ params }) => {
       status: 404,
     });
 
-  const data = { post, user };
-  return data;
+  return post;
 };
 
 export const action: ActionFunction = async ({ params, request }) => {
@@ -54,27 +49,27 @@ export function CatchBoundary() {
 
 export default function Post() {
   const {
-    post,
+    content,
+    createdAt,
+    title,
     user: { username },
   } = useLoaderData();
 
   return (
     <div className="flex flex-col gap-4">
-      <Heading>{post.title}</Heading>
+      <Heading>{title}</Heading>
       <div className="flex flex-col gap-1">
         <span>
           by <span className="text-brand-blue-500">{username}</span>
         </span>
-        <span className="text-sm">
-          {new Date(post.createdAt).toLocaleString()}
-        </span>
+        <span className="text-sm">{new Date(createdAt).toLocaleString()}</span>
       </div>
       <p
         style={{
           whiteSpace: 'pre-wrap',
         }}
       >
-        {post.content}
+        {content}
       </p>
       <form method="POST">
         <input type="hidden" name="_method" value="delete" />
