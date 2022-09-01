@@ -1,43 +1,48 @@
-import { redirect } from '@remix-run/node'
-import { Link, useLoaderData } from '@remix-run/react'
-import { Heading } from '@chakra-ui/react'
-import { prisma } from '~/db'
+import { redirect } from '@remix-run/node';
+import { Link, useLoaderData } from '@remix-run/react';
+import { Heading } from '@chakra-ui/react';
+import { prisma } from '~/db';
 
-import Button from '~/components/button'
+import Button from '~/components/button';
 
 export const loader = async ({ params }: { params: { postId: string } }) => {
   const post = await prisma.post.findUnique({
     where: { id: params.postId },
-  })
+  });
+  const user = await prisma.user.findUnique({
+    where: {
+      id: post?.userId,
+    },
+  });
 
   if (!post)
     throw new Response('Not Found', {
       status: 404,
-    })
+    });
 
-  const data = { post }
-  return data
-}
+  const data = { post, user };
+  return data;
+};
 
 export const action = async ({
   params,
   request,
 }: {
-  params: { postId: string }
-  request: Request
+  params: { postId: string };
+  request: Request;
 }) => {
-  const form = await request.formData()
+  const form = await request.formData();
   if (form.get('_method') === 'delete') {
     const post = await prisma.post.findUnique({
       where: { id: params.postId },
-    })
+    });
 
-    if (!post) throw new Error('Post not found')
+    if (!post) throw new Error('Post not found');
 
-    await prisma.post.delete({ where: { id: params.postId } })
-    return redirect('/posts')
+    await prisma.post.delete({ where: { id: params.postId } });
+    return redirect('/posts');
   }
-}
+};
 
 export function CatchBoundary() {
   return (
@@ -48,18 +53,21 @@ export function CatchBoundary() {
         <Button>Back to posts</Button>
       </Link>
     </div>
-  )
+  );
 }
 
 export default function Post() {
-  const { post } = useLoaderData()
+  const {
+    post,
+    user: { username },
+  } = useLoaderData();
 
   return (
     <div className="flex flex-col gap-4">
       <Heading>{post.title}</Heading>
       <div className="flex flex-col gap-1">
         <span>
-          by <span className="text-brand-blue-500">anonymous</span>
+          by <span className="text-brand-blue-500">{username}</span>
         </span>
         <span className="text-sm">
           {new Date(post.createdAt).toLocaleString()}
@@ -77,5 +85,5 @@ export default function Post() {
         <Button>Delete</Button>
       </form>
     </div>
-  )
+  );
 }
