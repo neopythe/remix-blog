@@ -11,25 +11,10 @@ export const loader: LoaderFunction = async () => {
   const posts = await prisma.post.findMany({
     take: 3,
     orderBy: { createdAt: 'desc' },
+    include: { user: { select: { username: true } } },
   });
 
-  const data = {
-    posts: await Promise.all(
-      posts.map(async (post) => {
-        const user = await prisma.user.findUnique({
-          where: {
-            id: post.userId,
-          },
-        });
-        return {
-          username: user?.username,
-          ...post,
-        };
-      })
-    ),
-  };
-
-  return data;
+  return posts;
 };
 
 export default function Home() {
@@ -38,7 +23,7 @@ export default function Home() {
     colours: { blue },
   } = theme;
 
-  const { posts } = useLoaderData();
+  const posts = useLoaderData();
 
   return (
     <div className="flex flex-col items-end justify-between h-full">
@@ -59,18 +44,18 @@ export default function Home() {
               createdAt: Date;
               id: string;
               title: string;
-              username: string;
+              user: { username: string };
             },
             index: number
           ) => (
             <PostPreview
               key={post.id}
               id={post.id}
-              username={post.username}
+              username={post.user.username}
               title={post.title}
               content={post.content}
               createdAt={post.createdAt}
-              right={index % 2 !== 0}
+              right={Boolean(index % 2)}
             />
           )
         )}
