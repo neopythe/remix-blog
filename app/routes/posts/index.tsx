@@ -10,29 +10,14 @@ import PostCard from '~/components/post-card';
 export const loader: LoaderFunction = async () => {
   const posts = await prisma.post.findMany({
     orderBy: { createdAt: 'desc' },
+    include: { user: { select: { username: true } } },
   });
 
-  const data = {
-    posts: await Promise.all(
-      posts.map(async (post) => {
-        const user = await prisma.user.findUnique({
-          where: {
-            id: post.userId,
-          },
-        });
-        return {
-          username: user?.username,
-          ...post,
-        };
-      })
-    ),
-  };
-
-  return data;
+  return posts;
 };
 
 export default function Posts() {
-  const { posts } = useLoaderData();
+  const posts = useLoaderData();
 
   return (
     <div className="flex flex-col gap-6">
@@ -59,7 +44,7 @@ export default function Posts() {
               id: string;
               title: string;
               userId: string;
-              username: string;
+              user: { username: string };
             }) => (
               <li key={post.id}>
                 <PostCard post={post} />
