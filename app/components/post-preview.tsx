@@ -1,5 +1,5 @@
-import { Link } from '@remix-run/react'
-import { truncate } from 'lodash'
+import { Link } from '@remix-run/react';
+import { truncate } from 'lodash';
 
 export default function PostPreview({
   content,
@@ -7,12 +7,14 @@ export default function PostPreview({
   id,
   title,
   right,
+  username,
 }: {
-  content: string
-  createdAt: Date
-  id: string
-  right?: boolean
-  title: string
+  content: string;
+  createdAt: Date;
+  id: string;
+  right?: boolean;
+  title: string;
+  username: string;
 }) {
   return (
     <div
@@ -34,10 +36,10 @@ export default function PostPreview({
       <div className="flex items-center gap-4">
         <div className="h-8 w-8 rounded-[50%] bg-slate-400"></div>
         <span className="text-xs">
-          <span>{new Date(createdAt).toLocaleString()}</span> by{' '}
-          <span className="text-brand-blue-500">anonymous</span>
+          <span>{new Date(createdAt).toLocaleString()}</span>
+          by <span className="text-brand-blue-500">{username}</span>
         </span>
       </div>
     </div>
-  )
+  );
 }
