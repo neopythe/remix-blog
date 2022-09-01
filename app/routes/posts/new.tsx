@@ -1,3 +1,5 @@
+import type { ActionFunction } from '@remix-run/node';
+
 import { json, redirect } from '@remix-run/node';
 import { Heading } from '@chakra-ui/react';
 import { prisma } from '~/db';
@@ -19,7 +21,7 @@ const validateTitle = (title: string) => {
   }
 };
 
-export const action = async ({ request }: { request: Request }) => {
+export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData();
   const title = String(form.get('title'));
   const content = String(form.get('content'));

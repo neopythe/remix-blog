@@ -1,4 +1,4 @@
-import type { LoaderFunction } from '@remix-run/node';
+import type { ActionFunction, LoaderFunction } from '@remix-run/node';
 
 import { redirect } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
@@ -26,13 +26,7 @@ export const loader: LoaderFunction = async ({ params }) => {
   return data;
 };
 
-export const action = async ({
-  params,
-  request,
-}: {
-  params: { postId: string };
-  request: Request;
-}) => {
+export const action: ActionFunction = async ({ params, request }) => {
   const form = await request.formData();
   if (form.get('_method') === 'delete') {
     const post = await prisma.post.findUnique({
