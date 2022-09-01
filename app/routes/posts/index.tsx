@@ -1,20 +1,36 @@
-import { Link, useLoaderData } from '@remix-run/react'
-import { Heading } from '@chakra-ui/react'
-import { prisma } from '~/db'
+import { Link, useLoaderData } from '@remix-run/react';
+import { Heading } from '@chakra-ui/react';
+import { prisma } from '~/db';
 
-import Button from '~/components/button'
+import Button from '~/components/button';
+import PostCard from '~/components/post-card';
 
 export const loader = async () => {
+  const posts = await prisma.post.findMany({
+    orderBy: { createdAt: 'desc' },
+  });
+
   const data = {
-    posts: await prisma.post.findMany({
-      orderBy: { createdAt: 'desc' },
-    }),
-  }
-  return data
-}
+    posts: await Promise.all(
+      posts.map(async (post) => {
+        const user = await prisma.user.findUnique({
+          where: {
+            id: post.userId,
+          },
+        });
+        return {
+          username: user?.username,
+          ...post,
+        };
+      })
+    ),
+  };
+
+  return data;
+};
 
 export default function Posts() {
-  const { posts } = useLoaderData()
+  const { posts } = useLoaderData();
 
   return (
     <div className="flex flex-col gap-6">
@@ -24,38 +40,32 @@ export default function Posts() {
           <Button>New post</Button>
         </Link>
       </div>
-      <ul className="flex flex-col gap-4">
-        {(!posts || posts.length === 0) && (
-          <span>
-            <Link to="/posts/new">
-              <span className="text-brand-blue-500">Add a new post</span>
-            </Link>{' '}
-            to get started.
-          </span>
-        )}
-        {posts.map(
-          (post: {
-            content: string
-            createdAt: Date
-            id: string
-            title: string
-          }) => (
-            <li key={post.id} className="border rounded border-gray-200 p-4">
-              <Link to={`/posts/${post.id}`}>
-                <div className="flex flex-col">
-                  <span className="font-semibold">{post.title}</span>
-                  <span className="flex gap-1">
-                    <span>{new Date(post.createdAt).toLocaleString()}</span>
-                    <span>
-                      by <span className="text-brand-blue-500">anonymous</span>
-                    </span>
-                  </span>
-                </div>
-              </Link>
-            </li>
-          )
-        )}
-      </ul>
+      {(!posts || posts.length === 0) && (
+        <span>
+          <Link to="/posts/new">
+            <span className="text-brand-blue-500">Add a new post</span>
+          </Link>{' '}
+          to get started.
+        </span>
+      )}
+      {posts && (
+        <ul className="flex flex-col gap-4">
+          {posts.map(
+            (post: {
+              content: string;
+              createdAt: Date;
+              id: string;
+              title: string;
+              userId: string;
+              username: string;
+            }) => (
+              <li key={post.id}>
+                <PostCard post={post} />
+              </li>
+            )
+          )}
+        </ul>
+      )}
     </div>
-  )
+  );
 }
