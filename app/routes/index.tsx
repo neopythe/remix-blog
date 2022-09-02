@@ -37,27 +37,32 @@ export default function Home() {
             ?
           </span>
         )}
-        {posts.map(
-          (
-            post: {
-              content: string;
-              createdAt: Date;
-              id: string;
-              title: string;
-              user: { username: string };
-            },
-            index: number
-          ) => (
-            <PostPreview
-              key={post.id}
-              id={post.id}
-              username={post.user.username}
-              title={post.title}
-              content={post.content}
-              createdAt={post.createdAt}
-              right={Boolean(index % 2)}
-            />
-          )
+        {posts && (
+          <ul>
+            {posts.map(
+              (
+                post: {
+                  content: string;
+                  createdAt: Date;
+                  id: string;
+                  title: string;
+                  user: { username: string };
+                },
+                index: number
+              ) => (
+                <li key={post.id}>
+                  <PostPreview
+                    id={post.id}
+                    username={post.user.username}
+                    title={post.title}
+                    content={post.content}
+                    createdAt={post.createdAt}
+                    right={Boolean(index % 2)}
+                  />
+                </li>
+              )
+            )}
+          </ul>
         )}
       </section>
       <BoxGrid colour={blue} />
