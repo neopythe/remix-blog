@@ -38,7 +38,7 @@ export default function Home() {
           </span>
         )}
         {posts && (
-          <ul>
+          <ul className="flex flex-col gap-6">
             {posts.map(
               (
                 post: {
