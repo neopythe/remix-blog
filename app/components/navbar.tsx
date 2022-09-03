@@ -1,24 +1,21 @@
-import { NavLink } from '@remix-run/react'
-import { useTheme } from '@chakra-ui/react'
-import { MdStickyNote2 } from 'react-icons/md'
+import { NavLink } from '@remix-run/react';
+import { MdStickyNote2 } from 'react-icons/md';
 
-import DropdownMenu from './dropdown-menu'
+import DropdownMenu from './dropdown-menu';
 
 export default function Navbar() {
-  const theme = useTheme()
-  const {
-    colours: { blue },
-  } = theme
-
-  const pages = ['Posts', 'About']
+  const pages = [
+    { path: '/posts', title: 'Posts' },
+    { path: '/auth/login', title: 'Login' },
+  ];
 
   const activeStyle = {
     textDecoration: 'underline wavy 2px',
     textUnderlineOffset: '0.5rem',
-  }
+  };
 
   return (
-    <nav style={{ backgroundColor: blue[800], color: '#fff' }}>
+    <nav className="bg-brand-blue-800 text-white">
       <div className="px-8 py-6 flex justify-between items-center max-w-screen-lg mx-auto">
         <NavLink
           to="/"
@@ -26,7 +23,7 @@ export default function Navbar() {
         >
           <MdStickyNote2 />
           <span className="melody-bold">
-            Remix <span style={{ color: blue[200] }}>Blog</span>
+            Remix <span className="text-brand-blue-200">Blog</span>
           </span>
         </NavLink>
         <div className="navigation">
@@ -35,13 +32,12 @@ export default function Navbar() {
           </div>
           <ul className="hidden gap-8 font-semibold">
             {pages.map((page) => (
-              <li key={page}>
+              <li key={page.title}>
                 <NavLink
-                  key={page}
-                  to={`/${page.toLowerCase()}`}
+                  to={page.path}
                   style={({ isActive }) => (isActive ? activeStyle : {})}
                 >
-                  {page}
+                  {page.title}
                 </NavLink>
               </li>
             ))}
@@ -49,5 +45,5 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
-  )
+  );
 }
