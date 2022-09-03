@@ -2,7 +2,9 @@ import type { ActionFunction } from '@remix-run/node';
 
 import { json, redirect } from '@remix-run/node';
 import { Heading } from '@chakra-ui/react';
+
 import { prisma } from '~/db';
+import { getUser } from '~/utils/session.server';
 
 import NewPostForm from '~/components/new-post-form';
 
@@ -21,25 +23,34 @@ const validateTitle = (title: string) => {
   }
 };
 
+const badRequest = (data: {
+  fieldErrors: { title?: string; content?: string };
+  fields: { title: string; content: string };
+}) => json(data, { status: 400 });
+
 export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData();
   const title = String(form.get('title'));
   const content = String(form.get('content'));
+  const user = await getUser(request);
 
   const fields = { title, content };
 
   const fieldErrors = {
-    content: validateContent(content),
     title: validateTitle(title),
+    content: validateContent(content),
   };
 
   if (Object.values(fieldErrors).some(Boolean)) {
-    return json({ fieldErrors, fields }, { status: 400 });
+    return badRequest({ fieldErrors, fields });
   }
 
-  const post = await prisma.post.create({ data: fields });
-
-  return redirect(`/posts/${post.id}`);
+  if (user) {
+    const post = await prisma.post.create({
+      data: { ...fields, userId: user.id },
+    });
+    return redirect(`/posts/${post.id}`);
+  }
 };
 
 export const ErrorBoundary = ({ error }: { error: Error }) => {
