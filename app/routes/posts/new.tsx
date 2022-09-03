@@ -50,6 +50,8 @@ export const action: ActionFunction = async ({ request }) => {
       data: { ...fields, userId: user.id },
     });
     return redirect(`/posts/${post.id}`);
+  } else {
+    return redirect('/posts');
   }
 };
 
