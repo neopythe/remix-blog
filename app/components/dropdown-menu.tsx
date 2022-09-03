@@ -1,4 +1,4 @@
-import { NavLink } from '@remix-run/react'
+import { NavLink } from '@remix-run/react';
 import {
   IconButton,
   Menu,
@@ -6,14 +6,18 @@ import {
   MenuList,
   MenuItem,
   useTheme,
-} from '@chakra-ui/react'
-import { CgMenuGridR } from 'react-icons/cg'
+} from '@chakra-ui/react';
+import { CgMenuGridR } from 'react-icons/cg';
 
-export default function DropdownMenu({ pages }: { pages: string[] }) {
-  const theme = useTheme()
+export default function DropdownMenu({
+  pages,
+}: {
+  pages: { path: string; title: string }[];
+}) {
+  const theme = useTheme();
   const {
     colours: { blue },
-  } = theme
+  } = theme;
 
   return (
     <Menu>
@@ -27,11 +31,11 @@ export default function DropdownMenu({ pages }: { pages: string[] }) {
       />
       <MenuList color={blue[500]}>
         {pages.map((page) => (
-          <NavLink key={page} to={`/${page.toLowerCase()}`}>
-            <MenuItem>{page}</MenuItem>
+          <NavLink key={page.title} to={page.path}>
+            <MenuItem>{page.title}</MenuItem>
           </NavLink>
         ))}
       </MenuList>
     </Menu>
-  )
+  );
 }
