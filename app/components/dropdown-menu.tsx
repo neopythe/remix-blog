@@ -10,8 +10,10 @@ import {
 import { CgMenuGridR } from 'react-icons/cg';
 
 export default function DropdownMenu({
+  isUser,
   pages,
 }: {
+  isUser: boolean;
   pages: { path: string; title: string }[];
 }) {
   const theme = useTheme();
@@ -35,6 +37,36 @@ export default function DropdownMenu({
             <MenuItem>{page.title}</MenuItem>
           </NavLink>
         ))}
+        {isUser ? (
+          <form action="/logout" method="POST">
+            <button className="w-full" type="submit">
+              <MenuItem
+                backgroundColor={blue[500]}
+                color="#fff"
+                _active={{ backgroundColor: blue[900], color: '#fff' }}
+                _hover={{ backgroundColor: blue[900], color: '#fff' }}
+              >
+                Logout
+              </MenuItem>
+            </button>
+          </form>
+        ) : (
+          <>
+            <NavLink to="/login">
+              <MenuItem>Login</MenuItem>
+            </NavLink>
+            <NavLink to="/register">
+              <MenuItem
+                backgroundColor={blue[500]}
+                color="#fff"
+                _active={{ backgroundColor: blue[900], color: '#fff' }}
+                _hover={{ backgroundColor: blue[900], color: '#fff' }}
+              >
+                Register
+              </MenuItem>
+            </NavLink>
+          </>
+        )}
       </MenuList>
     </Menu>
   );

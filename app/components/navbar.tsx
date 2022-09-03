@@ -1,13 +1,12 @@
-import { NavLink } from '@remix-run/react';
+import { NavLink, useLoaderData } from '@remix-run/react';
 import { MdStickyNote2 } from 'react-icons/md';
 
 import DropdownMenu from './dropdown-menu';
 
 export default function Navbar() {
-  const pages = [
-    { path: '/posts', title: 'Posts' },
-    { path: '/auth/login', title: 'Login' },
-  ];
+  const { user } = useLoaderData();
+
+  const pages = [{ path: '/posts', title: 'Posts' }];
 
   const activeStyle = ({ isActive }: { isActive: boolean }) =>
     isActive
@@ -31,7 +30,7 @@ export default function Navbar() {
         </NavLink>
         <div className="navigation">
           <div>
-            <DropdownMenu pages={pages} />
+            <DropdownMenu isUser={Boolean(user)} pages={pages} />
           </div>
           <ul className="hidden gap-8 font-semibold">
             {pages.map((page) => (
@@ -41,6 +40,28 @@ export default function Navbar() {
                 </NavLink>
               </li>
             ))}
+            {user ? (
+              <li>
+                <form action="/logout" method="POST">
+                  <button type="submit">Logout</button>
+                </form>
+              </li>
+            ) : (
+              <>
+                <li>
+                  <NavLink to="/login" style={activeStyle}>
+                    Login
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/register">
+                    <span className="bg-white text-brand-blue-800 p-2 rounded">
+                      Register
+                    </span>
+                  </NavLink>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>
