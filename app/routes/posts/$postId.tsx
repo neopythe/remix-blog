@@ -82,7 +82,7 @@ export default function Post() {
       >
         {content}
       </p>
-      {user.id === userId && (
+      {user?.id === userId && (
         <form method="POST">
           <input type="hidden" name="_method" value="delete" />
           <Button>Delete</Button>
