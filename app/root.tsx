@@ -2,16 +2,16 @@ import type {
   MetaFunction,
   LinksFunction,
   LoaderFunction,
-} from '@remix-run/node'
+} from '@remix-run/node';
 
-import { useContext, useEffect } from 'react'
-import { withEmotionCache } from '@emotion/react'
+import { useContext, useEffect } from 'react';
+import { withEmotionCache } from '@emotion/react';
 import {
   ChakraProvider,
   cookieStorageManagerSSR,
   extendTheme,
   localStorageManager,
-} from '@chakra-ui/react'
+} from '@chakra-ui/react';
 import {
   Links,
   LiveReload,
@@ -20,14 +20,15 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
-} from '@remix-run/react'
+} from '@remix-run/react';
 
-import { ServerStyleContext, ClientStyleContext } from './context'
+import { ServerStyleContext, ClientStyleContext } from './context';
 
-import Footer from './components/footer'
-import Navbar from './components/navbar'
+import Footer from './components/footer';
+import Navbar from './components/navbar';
 
-import styles from './styles/app.css'
+import styles from './styles/app.css';
+import { getUser } from './utils/session.server';
 
 const colours = {
   blue: {
@@ -42,45 +43,49 @@ const colours = {
     100: '#BBDEFB',
     50: '#E3F2FD',
   },
-}
+};
 
-const theme = extendTheme({ colours })
+const theme = extendTheme({ colours });
 
 export const loader: LoaderFunction = async ({ request }) => {
-  return request.headers.get('cookie') ?? ''
-}
+  const data = {
+    cookies: request.headers.get('cookie') ?? '',
+    user: await getUser(request),
+  };
+  return data;
+};
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
   title: 'Remix Blog',
   viewport: 'width=device-width,initial-scale=1',
-})
+});
 
-export let links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }]
+export let links: LinksFunction = () => [{ rel: 'stylesheet', href: styles }];
 
 interface DocumentProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 const Document = withEmotionCache(
   ({ children }: DocumentProps, emotionCache) => {
-    const serverStyleData = useContext(ServerStyleContext)
-    const clientStyleData = useContext(ClientStyleContext)
+    const serverStyleData = useContext(ServerStyleContext);
+    const clientStyleData = useContext(ClientStyleContext);
 
     // Only executed on client
     useEffect(() => {
       // re-link sheet container
-      emotionCache.sheet.container = document.head
+      emotionCache.sheet.container = document.head;
       // re-inject tags
-      const tags = emotionCache.sheet.tags
-      emotionCache.sheet.flush()
+      const tags = emotionCache.sheet.tags;
+      emotionCache.sheet.flush();
       tags.forEach((tag) => {
-        ;(emotionCache.sheet as any)._insertTag(tag)
-      })
+        (emotionCache.sheet as any)._insertTag(tag);
+      });
       // reset cache to reapply global styles
-      clientStyleData?.reset()
+      clientStyleData?.reset();
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, []);
 
     return (
       <html lang="en">
@@ -102,9 +107,9 @@ const Document = withEmotionCache(
           <LiveReload />
         </body>
       </html>
-    )
+    );
   }
-)
+);
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -115,11 +120,11 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       </main>
       <Footer />
     </div>
-  )
-}
+  );
+};
 
 export default function App() {
-  const cookies = useLoaderData()
+  const { cookies } = useLoaderData();
 
   return (
     <Document>
@@ -136,5 +141,5 @@ export default function App() {
         </Layout>
       </ChakraProvider>
     </Document>
-  )
+  );
 }
