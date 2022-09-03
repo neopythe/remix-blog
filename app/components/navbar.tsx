@@ -9,10 +9,13 @@ export default function Navbar() {
     { path: '/auth/login', title: 'Login' },
   ];
 
-  const activeStyle = {
-    textDecoration: 'underline wavy 2px',
-    textUnderlineOffset: '0.5rem',
-  };
+  const activeStyle = ({ isActive }: { isActive: boolean }) =>
+    isActive
+      ? {
+          textDecoration: 'underline wavy 2px',
+          textUnderlineOffset: '0.5rem',
+        }
+      : {};
 
   return (
     <nav className="bg-brand-blue-800 text-white">
@@ -33,10 +36,7 @@ export default function Navbar() {
           <ul className="hidden gap-8 font-semibold">
             {pages.map((page) => (
               <li key={page.title}>
-                <NavLink
-                  to={page.path}
-                  style={({ isActive }) => (isActive ? activeStyle : {})}
-                >
+                <NavLink to={page.path} style={activeStyle}>
                   {page.title}
                 </NavLink>
               </li>
